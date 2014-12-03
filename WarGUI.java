@@ -4,7 +4,6 @@ package War;
 //Can still add the flipping of cards when war is 
 //activated and show what cards are won and lost
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 
@@ -166,6 +165,7 @@ public class WarGUI extends JFrame
 	         {
 	        	 String endString = Game.compareFinalHand();
 	   	      	 JOptionPane.showMessageDialog(null , endString);
+	   	      	 System.exit(0);
 	         }
 	         else //play game
 	         {
