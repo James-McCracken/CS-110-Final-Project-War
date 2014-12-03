@@ -8,6 +8,7 @@ import java.awt.event.*;
 public class WarGUI extends JFrame
 {
 	//initialize the game parts
+	private JFrame frame;
 	private GameEngineGUI Game;
 	private ImageIcon cardBack;
 	private JLabel back1;
@@ -20,6 +21,7 @@ public class WarGUI extends JFrame
 	private JPanel flipPanel;
 	private JPanel deck1BackPanel;
 	private JPanel deck2BackPanel;
+	
 	private JPanel deck1PlayPanel;
 	private JPanel deck2PlayPanel;
 	private JLabel deck1Lable;
@@ -32,11 +34,13 @@ public class WarGUI extends JFrame
 	private JLabel card2;
 	
 	
-	
+	/**
+	 * constructor. makes the initial war game GUI
+	 */
 	public WarGUI()
 	{
 		
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.setLayout(new BorderLayout()); //allows the elements to start top middle and fill accordingly
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -50,8 +54,10 @@ public class WarGUI extends JFrame
 		button = new JButton ("WAR!"); //create button
 		button.addActionListener(new ButtonListener());
 		
+		
 		//make panels for all instances
 		buttonPanel = new JPanel();//south panel for card flip
+		buttonPanel.add(button);
 		
 		buttonPanel.setBackground(Color.DARK_GRAY);
 		deck1Panel = new JPanel();//where deck 1 will sit in west
@@ -92,10 +98,11 @@ public class WarGUI extends JFrame
 		flipPanel.add(deck2PlayPanel);
 		flipPanel.add(deck2BackPanel);
 		
+		
 
 		
 		//add to panels
-		buttonPanel.add(button);
+		
 		
 		deck1Lable = new JLabel("Deck 1"); //create label
 		deck1Panel.add(deck1Lable);
@@ -135,35 +142,85 @@ public class WarGUI extends JFrame
 //			  });
 //		//start game
 		Game = new GameEngineGUI();
-		
-		
-		
+
 	}
-	
+
+	/**
+	 * button action for when it is pressed
+	 * @author James
+	 *
+	 */
 	class ButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
-			//JButton button = (JButton)(e.getSource());
 			Game.flip();
 			card1Image = new ImageIcon(Game.image1);
 			card2Image = new ImageIcon(Game.image2);
-			//deck1PlayPanel.removeAll();
-			//deck2PlayPanel.removeAll();
+			deck1PlayPanel.removeAll();
+			deck2PlayPanel.removeAll();
 			card1 = new JLabel(card1Image);
 			card2 = new JLabel(card2Image);
 			deck1PlayPanel.add(card1);
 			deck2PlayPanel.add(card2);
+			frame.validate();
 			
-			//deck1PlayPanel.revalidate();
-			//deck2PlayPanel.revalidate();
+			int hand = Game.compare(Game.deck1, Game.deck2);
+			if (hand == 1)
+			{
+				Game.addToDeck(Game.deck1, Game.deck2);
+				Game.removeFromDeck(Game.deck2);
+				
+			}
+			else if(hand == 2)
+			{
+				Game.addToDeck(Game.deck2, Game.deck1);
+				Game.removeFromDeck(Game.deck1);
+			}
+			//if they are the same
+			else
+			{
+				//call war
+				Game.war(); 
+
+				//3 face down cards for deck 1
+				for (int i =0; i < 3; i++)
+				{
+					card1Image = new ImageIcon("CardPics//back.jpg");
+					
+					card1 = new JLabel(card1Image);;
+					deck1PlayPanel.add(card1);
+				}
+				//3 face down cards for deck 2
+				for (int i =0; i < 3; i++)//(Card i : Game.warDeck2)//
+				{
+					//card2Image = new ImageIcon("CardPics//"+i.toString()+".jpg");
+					card2Image = new ImageIcon("CardPics//back.jpg");
+					card2 = new JLabel(card2Image);
+					deck2PlayPanel.add(card2);
+					frame.validate();
+				}
+				//flip and print new compare cards
+				Game.flip();
+				card1Image = new ImageIcon(Game.image1);
+				card2Image = new ImageIcon(Game.image2);
+				card1 = new JLabel(card1Image);
+				card2 = new JLabel(card2Image);
+				deck1PlayPanel.add(card1);
+				deck2PlayPanel.add(card2);
+				deck1PlayPanel.validate();
+				deck2PlayPanel.validate();
+			}
 			
-			System.out.println("You clicked the 'PLAY!' button");
-			//Game.compare();
+			
+			
 		}
 	}
+
 	
-	
+	/**
+	 * call game
+	 */
 	public static void main(String [] args)
 	{
 		new WarGUI();
