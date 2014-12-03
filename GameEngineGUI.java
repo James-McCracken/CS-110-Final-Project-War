@@ -92,7 +92,13 @@ public class GameEngineGUI extends Deck
 		warDeck2.add(deck2.remove(0)); 
 		warDeck2.add(deck2.remove(0));
 		warDeck2.add(deck2.remove(0));
-
+		
+		//shows next war card
+		flip();
+		
+		//removes the war cards from the 2 decks and adds then to the war decks
+		warDeck1.add(deck1.remove(0));
+		warDeck2.add(deck2.remove(0));
 		while(hand != 1 && hand != 2)
 		{
 			compare4thCard(deck1, deck2);
@@ -140,19 +146,19 @@ public class GameEngineGUI extends Deck
 	/**
 	 * compareFinalHand compares the remaining cards in each hand to determine a winner
 	 */
-	public void compareFinalHand()
+	public String compareFinalHand()
 	{
 		if(deck1.size() > deck2.size())
 		{
-			//System.out.print("Deck 1 Wins With: " + deck1.size() + " Cards!");
+			return ("Deck 1 Wins With: " + deck1.size() + " Cards!");
 		}
 		else if(deck1.size() < deck2.size())
 		{
-			//System.out.print("Deck 2 Wins With:" + deck2.size() + " Cards!");
+			return("Deck 2 Wins With:" + deck2.size() + " Cards!");
 		}
 		else
 		{
-			//System.out.print("It's a Tie!");
+			return ("It's a Tie with 26 cards each!");
 		}
 	}
 	

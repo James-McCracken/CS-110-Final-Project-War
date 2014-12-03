@@ -1,5 +1,8 @@
 package War;
 
+
+//Can still add the flipping of cards when war is 
+//activated and show what cards are won and lost
 import javax.swing.*;
 
 import java.awt.*;
@@ -13,7 +16,8 @@ public class WarGUI extends JFrame
 	private ImageIcon cardBack;
 	private JLabel back1;
 	private JLabel back2;
-	private JButton button;
+	private JButton playButton;
+	private JButton stopButton;
 	private JPanel buttonPanel;
 	private JPanel deck1Panel;
 	private JPanel deck2Panel;
@@ -51,21 +55,23 @@ public class WarGUI extends JFrame
 		back1 = new JLabel(cardBack);
 		back2 = new JLabel(cardBack);
 		
-		button = new JButton ("WAR!"); //create button
-		button.addActionListener(new ButtonListener());
-		
+		playButton = new JButton ("WAR!"); //create button
+		playButton.addActionListener(new ButtonListener());
+		stopButton = new JButton ("End Game"); //create button
+		stopButton.addActionListener(new ButtonListener());
 		
 		//make panels for all instances
 		buttonPanel = new JPanel();//south panel for card flip
-		buttonPanel.add(button);
+		buttonPanel.add(playButton);
+		buttonPanel.add(stopButton);
 		
 		buttonPanel.setBackground(Color.DARK_GRAY);
 		deck1Panel = new JPanel();//where deck 1 will sit in west
 		
-		deck1Panel.setBackground(Color.BLUE);
+		deck1Panel.setBackground(Color.CYAN);
 		deck2Panel = new JPanel();//where deck 2 will sit in east
 		
-		deck2Panel.setBackground(Color.BLUE);
+		deck2Panel.setBackground(Color.CYAN);
 		topLabel = new JLabel("Welcome To War!", JLabel.CENTER); //North label for title
 		
 		//break center panel into 2 panels
@@ -78,17 +84,17 @@ public class WarGUI extends JFrame
 		
 		deck1PlayPanel = new JPanel();
 		//card1Image = new ImageIcon();
-		deck1PlayPanel.setBackground(Color.magenta);
+		deck1PlayPanel.setBackground(Color.GREEN);
 		
 		
 		deck2BackPanel = new JPanel(); //right side of panel
 		//deck2BackPanel.setLayout(new FlowLayout());
 		deck2BackPanel.add(back2); //prints back of card
-		deck2BackPanel.setBackground(Color.GREEN);
+		deck2BackPanel.setBackground(Color.RED);
 
 		deck2PlayPanel = new JPanel();
 		//deck2PlayPanel.setLayout(new FlowLayout());
-		deck2PlayPanel.setBackground(Color.BLUE);
+		deck2PlayPanel.setBackground(Color.GREEN);
 		
 
 	    
@@ -154,66 +160,73 @@ public class WarGUI extends JFrame
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
-			Game.flip();
-			card1Image = new ImageIcon(Game.image1);
-			card2Image = new ImageIcon(Game.image2);
-			deck1PlayPanel.removeAll();
-			deck2PlayPanel.removeAll();
-			card1 = new JLabel(card1Image);
-			card2 = new JLabel(card2Image);
-			deck1PlayPanel.add(card1);
-			deck2PlayPanel.add(card2);
-			frame.validate();
-			
-			int hand = Game.compare(Game.deck1, Game.deck2);
-			if (hand == 1)
-			{
-				Game.addToDeck(Game.deck1, Game.deck2);
-				Game.removeFromDeck(Game.deck2);
-				
-			}
-			else if(hand == 2)
-			{
-				Game.addToDeck(Game.deck2, Game.deck1);
-				Game.removeFromDeck(Game.deck1);
-			}
-			//if they are the same
-			else
-			{
-				//call war
-				Game.war(); 
-
-				//3 face down cards for deck 1
-				for (int i =0; i < 3; i++)
-				{
-					card1Image = new ImageIcon("CardPics//back.jpg");
-					
-					card1 = new JLabel(card1Image);;
-					deck1PlayPanel.add(card1);
-				}
-				//3 face down cards for deck 2
-				for (int i =0; i < 3; i++)//(Card i : Game.warDeck2)//
-				{
-					//card2Image = new ImageIcon("CardPics//"+i.toString()+".jpg");
-					card2Image = new ImageIcon("CardPics//back.jpg");
-					card2 = new JLabel(card2Image);
-					deck2PlayPanel.add(card2);
-					frame.validate();
-				}
-				//flip and print new compare cards
+			//JButton war = (JButton)(e.getSource());
+			JButton end = (JButton)(e.getSource());
+	         if (end.getText().equals("End Game"))
+	         {
+	        	 String endString = Game.compareFinalHand();
+	   	      	 JOptionPane.showMessageDialog(null , endString);
+	         }
+	         else //play game
+	         {
 				Game.flip();
 				card1Image = new ImageIcon(Game.image1);
 				card2Image = new ImageIcon(Game.image2);
+				deck1PlayPanel.removeAll();
+				deck2PlayPanel.removeAll();
 				card1 = new JLabel(card1Image);
 				card2 = new JLabel(card2Image);
 				deck1PlayPanel.add(card1);
 				deck2PlayPanel.add(card2);
-				deck1PlayPanel.validate();
-				deck2PlayPanel.validate();
-			}
-			
-			
-			
+				frame.validate();
+				
+				int hand = Game.compare(Game.deck1, Game.deck2);
+				if (hand == 1)
+				{
+					Game.addToDeck(Game.deck1, Game.deck2);
+					Game.removeFromDeck(Game.deck2);
+					
+				}
+				else if(hand == 2)
+				{
+					Game.addToDeck(Game.deck2, Game.deck1);
+					Game.removeFromDeck(Game.deck1);
+				}
+				//if they are the same
+				else
+				{
+					//call war
+					Game.war(); 
+	
+					//3 face down cards for deck 1
+					for (int i =0; i < 3; i++)
+					{
+						card1Image = new ImageIcon("CardPics//back.jpg");
+						
+						card1 = new JLabel(card1Image);;
+						deck1PlayPanel.add(card1);
+						frame.validate();
+					}
+					//3 face down cards for deck 2
+					for (int i =0; i < 3; i++)//(Card i : Game.warDeck2)//
+					{
+						//card2Image = new ImageIcon("CardPics//"+i.toString()+".jpg");
+						card2Image = new ImageIcon("CardPics//back.jpg");
+						card2 = new JLabel(card2Image);
+						deck2PlayPanel.add(card2);
+						frame.validate();
+					}
+					//flip and print new compare cards
+					//Game.flip();
+					card1Image = new ImageIcon(Game.image1);
+					card2Image = new ImageIcon(Game.image2);
+					card1 = new JLabel(card1Image);
+					card2 = new JLabel(card2Image);
+					deck1PlayPanel.add(card1);
+					deck2PlayPanel.add(card2);
+					frame.validate();
+				}
+	        }
 		}
 	}
 
