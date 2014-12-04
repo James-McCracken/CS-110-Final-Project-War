@@ -169,64 +169,92 @@ public class WarGUI extends JFrame
 	         }
 	         else //play game
 	         {
-				Game.flip();
-				card1Image = new ImageIcon(Game.image1);
-				card2Image = new ImageIcon(Game.image2);
-				deck1PlayPanel.removeAll();
-				deck2PlayPanel.removeAll();
-				card1 = new JLabel(card1Image);
-				card2 = new JLabel(card2Image);
-				deck1PlayPanel.add(card1);
-				deck2PlayPanel.add(card2);
-				frame.validate();
-				
-				int hand = Game.compare(Game.deck1, Game.deck2);
-				if (hand == 1)
-				{
-					Game.addToDeck(Game.deck1, Game.deck2);
-					Game.removeFromDeck(Game.deck2);
-					
-				}
-				else if(hand == 2)
-				{
-					Game.addToDeck(Game.deck2, Game.deck1);
-					Game.removeFromDeck(Game.deck1);
-				}
-				//if they are the same
-				else
-				{
-					//call war
-					Game.war(); 
-	
-					//3 face down cards for deck 1
-					for (int i =0; i < 3; i++)
-					{
-						card1Image = new ImageIcon("CardPics//back.jpg");
-						
-						card1 = new JLabel(card1Image);;
-						deck1PlayPanel.add(card1);
-						frame.validate();
-					}
-					//3 face down cards for deck 2
-					for (int i =0; i < 3; i++)//(Card i : Game.warDeck2)//
-					{
-						//card2Image = new ImageIcon("CardPics//"+i.toString()+".jpg");
-						card2Image = new ImageIcon("CardPics//back.jpg");
-						card2 = new JLabel(card2Image);
-						deck2PlayPanel.add(card2);
-						frame.validate();
-					}
-					//flip and print new compare cards
-					//Game.flip();
+	        	if(Game.deck1.size() == 0 || Game.deck2.size() == 0)
+	        	{
+	        		String endString = Game.compareFinalHand();
+		   	      	JOptionPane.showMessageDialog(null , endString);
+		   	      	System.exit(0);
+	        	}
+	        	else
+	        	{
+					Game.flip();
 					card1Image = new ImageIcon(Game.image1);
 					card2Image = new ImageIcon(Game.image2);
+					deck1PlayPanel.removeAll();
+					deck2PlayPanel.removeAll();
 					card1 = new JLabel(card1Image);
 					card2 = new JLabel(card2Image);
 					deck1PlayPanel.add(card1);
 					deck2PlayPanel.add(card2);
 					frame.validate();
-				}
-	        }
+					
+					int hand = Game.compare(Game.deck1, Game.deck2);
+					if (hand == 1)
+					{
+						Game.addToDeck(Game.deck1, Game.deck2);
+						Game.removeFromDeck(Game.deck2);
+						
+					}
+					else if(hand == 2)
+					{
+						Game.addToDeck(Game.deck2, Game.deck1);
+						Game.removeFromDeck(Game.deck1);
+					}
+					//if they are the same
+					else
+					{
+						
+						if(Game.deck1.size() < 4 || Game.deck2.size() < 4)
+			        	{
+							if(Game.deck1.size() < 4)
+				        	{
+								String endString = Game.compareFinalHand();
+				   	      		JOptionPane.showMessageDialog(null , "Deck 1 does not have enough cards for the war! \n" + endString);
+				   	      		System.exit(0);
+				        	}
+							else
+							{
+								String endString = Game.compareFinalHand();
+				   	      		JOptionPane.showMessageDialog(null , "Deck 2 does not have enough cards for the war! \n" + endString);
+				   	      		System.exit(0);
+							}
+			        	}
+			        	else
+			        	{
+							//call war
+							Game.war(); 
+			
+							//3 face down cards for deck 1
+							for (int i = 0; i < 3; i++)
+							{
+								card1Image = new ImageIcon("CardPics//back.jpg");
+								
+								card1 = new JLabel(card1Image);;
+								deck1PlayPanel.add(card1);
+								frame.validate();
+							}
+							//3 face down cards for deck 2
+							for (int i = 0; i < 3; i++)//(Card i : Game.warDeck2)//
+							{
+								//card2Image = new ImageIcon("CardPics//"+i.toString()+".jpg");
+								card2Image = new ImageIcon("CardPics//back.jpg");
+								card2 = new JLabel(card2Image);
+								deck2PlayPanel.add(card2);
+								frame.validate();
+							}
+							//flip and print new compare cards
+							//Game.flip();
+							card1Image = new ImageIcon(Game.image1);
+							card2Image = new ImageIcon(Game.image2);
+							card1 = new JLabel(card1Image);
+							card2 = new JLabel(card2Image);
+							deck1PlayPanel.add(card1);
+							deck2PlayPanel.add(card2);
+							frame.validate();
+			        	}
+					}
+		        }
+	         }
 		}
 	}
 
